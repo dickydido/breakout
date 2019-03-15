@@ -9,6 +9,10 @@ var x = canvas.width / 2;
 var y = canvas.height - 30;
 var dx = 2;
 var dy = -2;
+var color = ["#0095DD", "red", "green", "purple", "brown", "orange", "yellow"];
+var i = 0;
+
+
 
 var ballRadius = 10;
 
@@ -16,9 +20,13 @@ var ballRadius = 10;
 function drawBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = color[i];
     ctx.fill();
     ctx.closePath();
+}
+
+function changeColor() {
+i = Math.floor(Math.random() * color.length);
 }
 
 function draw() {
@@ -28,9 +36,11 @@ function draw() {
     y += dy;
     if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
       dy = -dy;
+      changeColor();
     }
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
       dx = -dx;
+      changeColor();
     }
 }
 
