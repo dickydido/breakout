@@ -15,7 +15,7 @@ var ballRadius = 10;
 //Creates the ball every ten milliseconds.
 function drawBall() {
     ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI*2);
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
@@ -26,6 +26,12 @@ function draw() {
     drawBall();
     x += dx;
     y += dy;
+    if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+      dy = -dy;
+    }
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+      dx = -dx;
+    }
 }
 
 setInterval(draw, 10);
