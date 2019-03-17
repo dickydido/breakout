@@ -22,6 +22,23 @@ var leftPressed = false;
 
 var ballRadius = 10;
 
+var brickRowCount = 3;
+var brickColumnCount = 5;
+var brickWidth = 75;
+var brickHeight = 20;
+var brickPadding = 10;
+var brickOffsetTop = 30;
+var brickOffsetLeft = 30;
+
+var bricks = [];
+for(var c=0; c<brickColumnCount; c++) {
+    bricks[c] = [];
+    for(var r=0; r<brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0 };
+    }
+}
+
+
 //Creates the ball.
 function drawBall() {
     ctx.beginPath();
@@ -40,9 +57,26 @@ function drawPaddle() {
   ctx.closePath();
 }
 
+function drawBricks() {
+  for (var c = 0; c < brickColumnCount; c++) {
+    for (var r = 0; r < brickRowCount; r++) {
+      var brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+      var brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+      bricks[c][r].x = brickX;
+      bricks[c][r].y = brickY;
+      ctx.beginPath();
+      ctx.rect(brickX, brickY, brickWidth, brickHeight);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+  }
+}
+
 //Determines the direction of the recreation of each ball.
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
     drawBall();
     drawPaddle();
     x += dx;
@@ -50,9 +84,13 @@ function draw() {
     if (y + dy < ballRadius) {
       dy = -dy;
     } else if (y + dy > canvas.height - ballRadius) {
-      alert("GAME OVER");
-      document.location.reload();
-      clearInterval(interval); // Needed for Chrome to end game
+        if (x > paddleX && x < paddleX + paddleWidth) {
+          dy = -dy;
+        } else {
+          alert("GAME OVER");
+          document.location.reload();
+          clearInterval(interval); // Needed for Chrome to end game
+        }
     }
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
       dx = -dx;
